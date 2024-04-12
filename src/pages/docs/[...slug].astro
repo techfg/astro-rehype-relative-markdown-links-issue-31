@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const normalizeIndexSlug = (slug: string) => slug || undefined;
+  const blogEntries = await getCollection('docs');
+  const a = blogEntries.map(entry => ({
+    params: { slug: normalizeIndexSlug(entry.slug) }, props: { entry },
+  }));
+  console.log(a.forEach(({ params, props }) => console.log(`Entry: ${params.slug}`, props.entry)));
+  return a;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+<h1>{entry.data.title}</h1>
+
+<Content />
+
+My Slug is: [ {entry.slug } ]
